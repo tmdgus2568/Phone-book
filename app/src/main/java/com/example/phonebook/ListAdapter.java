@@ -1,13 +1,19 @@
 package com.example.phonebook;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListAdapter extends BaseAdapter {
     private ArrayList<CustomDTO> items = new ArrayList<>();
@@ -33,10 +39,45 @@ public class ListAdapter extends BaseAdapter {
     // Item 표현
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        CustomViewHolder holder;
+        Context context = parent.getContext();
 
-        return null;
+        // 'list_item' Layout을 inflate하여 convertView 참조 획득
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.list_item, parent, false);
+        }
+
+        /* 'list_item'에 정의된 위젯에 대한 참조 획득 */
+        CircleImageView pb_img = (CircleImageView) convertView.findViewById(R.id.profile_image) ;
+        TextView pb_name = (TextView) convertView.findViewById(R.id.name) ;
+        TextView pb_phone = (TextView) convertView.findViewById(R.id.phone) ;
+
+        /* 각 리스트에 뿌려줄 아이템을 받아오는데 mMyItem 재활용 */
+        CustomDTO myItem = (CustomDTO) getItem(position);
+
+        /* 각 위젯에 세팅된 아이템을 뿌려준다 */
+
+//        이미지 넣는거 나중에 할게여..
+//        pb_img.setImageDrawable(myItem.getIcon());
+        pb_name.setText(myItem.getName());
+        pb_phone.setText(myItem.getPhone());
+
+        /* 위젯에 대한 이벤트리스너  */
+
+        return convertView;
     }
 
+    /* 아이템 데이터 추가를 위한 함수. 자신이 원하는대로 작성 */
+    public void addItem( String name, String phone) {
 
+        CustomDTO mItem = new CustomDTO();
+
+        /* MyItem에 아이템을 setting한다. */
+//        mItem.setIcon(img);
+        mItem.setName(name);
+        mItem.setPhone(phone);
+
+        /* mItems에 MyItem을 추가한다. */
+        items.add(mItem);
+    }
 }

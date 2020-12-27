@@ -25,10 +25,23 @@ public class SingleContentItem extends LinearLayout {
 
     private void init(Context context) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.list_item, this. true);
+        inflater.inflate(R.layout.list_item, this, true);
 
         imageView = findViewById(R.id.profile_image);
         textName = findViewById(R.id.name);
         textPhone = findViewById(R.id.phone);
+    }
+
+//    이부분 머리 깨질거같아요
+//    public void setImageView(String url) {
+//        imageView.setImageResource(url);
+//    }
+
+    public void setTextName(String name) {
+        textName.setText(name);
+    }
+
+    public void setTextPhone(String phone) {
+        textPhone.setText(phone);
     }
 }
