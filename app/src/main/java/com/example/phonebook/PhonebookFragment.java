@@ -1,5 +1,6 @@
 package com.example.phonebook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -13,10 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class PhonebookFragment extends Fragment {
     ListView mListView;
+    FloatingActionButton fButton;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -24,15 +28,24 @@ public class PhonebookFragment extends Fragment {
 
         mListView = (ListView)v.findViewById(R.id.phone_list);
         ListAdapter adapter = new ListAdapter();
-
         // 아이템 넣는 부분
         String names[] = {"승현001", "승현002", "승현003", "승현004", "승현005", "승현006", "승현007", "승현008"};
         String phones[] = {"010-1111-1111", "010-2222-2222", "010-3333-3333", "010-4444-4444", "010-5555-5555", "010-6666-6666", "010-7777-7777", "010-8888-8888"};
         for(int i = 0; i < 8; i++) {
             adapter.addItem(names[i], phones[i]);
         }
-
         mListView.setAdapter(adapter);
+
+        fButton = (FloatingActionButton)v.findViewById(R.id.fab_add);
+        fButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AddFriend.class);
+                startActivity(intent);
+            }
+        });
+
+
         return v;
     }
 
