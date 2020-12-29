@@ -13,6 +13,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        // Cannot fit requested classes in a single dexfile error
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -33,9 +36,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
-    // firebase
+    // fireBase
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
     implementation 'com.google.firebase:firebase-analytics'
+
+    // fireStore
+    implementation 'com.google.firebase:firebase-firestore:21.2.1'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'de.hdodenhof:circleimageview:3.1.0'
