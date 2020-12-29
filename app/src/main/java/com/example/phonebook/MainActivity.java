@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.navigation);
 
+
         getSupportFragmentManager().beginTransaction().add(R.id.frameLayout, new CallFragment()).commit();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
