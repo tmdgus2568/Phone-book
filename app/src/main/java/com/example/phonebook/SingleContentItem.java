@@ -27,7 +27,7 @@ public class SingleContentItem extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.list_item, this, true);
 
-        imageView = findViewById(R.id.profile_image);
+        imageView = findViewById(R.id.profile_image_add);
         textName = findViewById(R.id.name);
         textPhone = findViewById(R.id.phone);
     }
