@@ -2,6 +2,7 @@ package com.example.phonebook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -19,35 +20,64 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 
 public class PhonebookFragment extends Fragment {
+    private static final int RESULT_OK = -1;
     ListView mListView;
     FloatingActionButton fButton;
+    ArrayList<CustomDTO> phone_list;
+    ListAdapter adapter;
+    Bundle bundle;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_phonebook, container, false);
-
         mListView = (ListView)v.findViewById(R.id.phone_list);
-        ListAdapter adapter = new ListAdapter();
-        // 아이템 넣는 부분
-        String names[] = {"승현001", "승현002", "승현003", "승현004", "승현005", "승현006", "승현007", "승현008"};
-        String phones[] = {"010-1111-1111", "010-2222-2222", "010-3333-3333", "010-4444-4444", "010-5555-5555", "010-6666-6666", "010-7777-7777", "010-8888-8888"};
-        for(int i = 0; i < 8; i++) {
-            adapter.addItem(names[i], phones[i]);
-        }
-        mListView.setAdapter(adapter);
 
+        // DB에서 가져온 전화번호 목록 출력
+        bundle = getArguments();
+        if(bundle != null) {
+            showTable();
+        }
+
+        // 추가 버튼 onClick 이벤트 처리
         fButton = (FloatingActionButton)v.findViewById(R.id.fab_add);
         fButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddFriend.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1000);
             }
         });
-
 
         return v;
     }
 
+    public void showTable() {
+        // DB에서 새로 값을 불러옴
+        ((MainActivity)MainActivity.mainContext).refreshTable();
 
+        adapter = new ListAdapter();
+        phone_list = bundle.getParcelableArrayList("friends");
+        Log.d("showtable :::" , "showtable~!@~@~!@");
+        // 데이터 입력
+        for(CustomDTO item : phone_list) {
+            adapter.addItem(item);
+        }
+        
+        mListView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case 1000:
+                    Log.d("end", "case1000");
+                    showTable();
+                    break;
+            }
+        }
+    }
 }

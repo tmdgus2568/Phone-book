@@ -99,6 +99,10 @@ public class AddFriend extends AppCompatActivity {
                                 }
                             });
 
+                    // 결과값 반환
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
+
                     finish();
                 }
             }
