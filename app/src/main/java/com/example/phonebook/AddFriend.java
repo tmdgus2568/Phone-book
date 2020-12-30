@@ -80,6 +80,8 @@ public class AddFriend extends AppCompatActivity {
                     if(imageUri!=null) {
                         clickUpload(v);
                         friend.put("Image", img);
+                    } else {
+                        friend.put("Image", "profile_image/basic_profile.png");
                     }
 
                     db.collection("friends")
