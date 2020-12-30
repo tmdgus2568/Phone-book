@@ -64,16 +64,15 @@ public class ListAdapter extends BaseAdapter {
     }
 
     /* 아이템 데이터 추가를 위한 함수. 자신이 원하는대로 작성 */
-    public void addItem( String name, String phone) {
-
-        CustomDTO mItem = new CustomDTO();
-
-        /* MyItem에 아이템을 setting한다. */
-//        mItem.setIcon(img);
-        mItem.setName(name);
-        mItem.setPhone(phone);
+    public void addItem(String image, String name, String phone) {
+        CustomDTO mItem = new CustomDTO(image, name, phone);
 
         /* mItems에 MyItem을 추가한다. */
         items.add(mItem);
+    }
+
+    /* 객체로 아이템 추가 */
+    public void addItem(CustomDTO item) {
+        items.add(item);
     }
 }
