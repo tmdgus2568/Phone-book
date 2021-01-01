@@ -1,11 +1,23 @@
 package com.example.phonebook;
 
 import android.content.Context;
+import android.net.Uri;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -44,7 +56,7 @@ public class ListAdapter extends BaseAdapter {
         }
 
         /* 'list_item'에 정의된 위젯에 대한 참조 획득 */
-        CircleImageView pb_img = (CircleImageView) convertView.findViewById(R.id.profile_image_add) ;
+        CircleImageView pb_img = (CircleImageView) convertView.findViewById(R.id.profile_image);
         TextView pb_name = (TextView) convertView.findViewById(R.id.name) ;
         TextView pb_phone = (TextView) convertView.findViewById(R.id.phone) ;
 
@@ -52,9 +64,7 @@ public class ListAdapter extends BaseAdapter {
         CustomDTO myItem = (CustomDTO) getItem(position);
 
         /* 각 위젯에 세팅된 아이템을 뿌려준다 */
-
-//        이미지 넣는거 나중에 할게여..
-//        pb_img.setImageDrawable(myItem.getIcon());
+        setImage(myItem, convertView, pb_img);
         pb_name.setText(myItem.getName());
         pb_phone.setText(myItem.getPhone());
 
@@ -74,5 +84,29 @@ public class ListAdapter extends BaseAdapter {
     /* 객체로 아이템 추가 */
     public void addItem(CustomDTO item) {
         items.add(item);
+    }
+
+    public void setImage(CustomDTO myItem, View convertView, CircleImageView pb_img) {
+        StorageReference ref = FirebaseStorage.getInstance().getReference().child(myItem.getImage());
+        if(ref != null) {
+            View finalConvertView = convertView;
+            ref.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()) {
+                        Glide.with(finalConvertView.getContext()).load(task.getResult()).into(pb_img);
+                    } else {
+                        Log.d("error", "불러오기실패");
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setImage(myItem, convertView, pb_img);
+                            }
+                        }, 500);
+                    }
+                }
+            });
+        }
     }
 }
