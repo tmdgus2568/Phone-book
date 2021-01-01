@@ -28,6 +28,7 @@ public class CallFragment extends Fragment {
     ImageView imageView11;
     ImageView imageView12;
     ImageView call_btn;
+    ImageView delete_btn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class CallFragment extends Fragment {
         imageView11 = v.findViewById(R.id.imageView11);
         imageView12 = v.findViewById(R.id.imageView12);
         call_btn = v.findViewById(R.id.call_btn);
+        delete_btn = v.findViewById(R.id.delete_btn);
 
         imageView1.setOnClickListener(this::onClick);
         imageView2.setOnClickListener(this::onClick);
@@ -60,6 +62,8 @@ public class CallFragment extends Fragment {
         imageView11.setOnClickListener(this::onClick);
         imageView12.setOnClickListener(this::onClick);
         call_btn.setOnClickListener(this::onClick);
+        delete_btn.setOnClickListener(this::onClick);
+
 
 
         return v;
@@ -109,6 +113,8 @@ public class CallFragment extends Fragment {
                 dialIntent.setData(Uri.parse("tel:"+callEdit.getText().toString()));
                 startActivity(dialIntent);
                 break;
+            case R.id.delete_btn:
+                callEdit.setText(callEdit.getText().toString().replaceFirst(".$",""));
 
         }
     }
