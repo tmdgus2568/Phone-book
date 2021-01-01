@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import android.os.Bundle;
@@ -51,6 +52,30 @@ public class PhonebookFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AddFriend.class);
                 startActivityForResult(intent, 1000);
+            }
+        });
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Click", adapter.getItem(position).getName() + adapter.getItem(position).getPhone());
+
+                Bundle bundle = new Bundle();
+                bundle.putString("Name", adapter.getItem(position).getName());
+                bundle.putString("Phone", adapter.getItem(position).getPhone());
+
+                CallFragment callFragment = new CallFragment();
+                callFragment.setArguments(bundle);
+
+                ((MainActivity)getActivity()).replaceFragment(callFragment);
+            }
+        });
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("Long Click", "long click");
+                return true;
             }
         });
 
