@@ -34,7 +34,7 @@ public class ListAdapter extends BaseAdapter {
 
     // position에 있는 아이템 가져오기
     @Override
-    public Object getItem(int position) {
+    public CustomDTO getItem(int position) {
         return items.get(position);
     }
 

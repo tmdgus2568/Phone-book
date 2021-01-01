@@ -3,6 +3,7 @@ package com.example.phonebook;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +30,13 @@ public class CallFragment extends Fragment {
     ImageView imageView12;
     ImageView call_btn;
     ImageView delete_btn;
+
+    Bundle bundle;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_call, container, false);
+
         callEdit = v.findViewById(R.id.callEdit);
         imageView1 = v.findViewById(R.id.imageView);
         imageView2 = v.findViewById(R.id.imageView2);
@@ -63,6 +67,18 @@ public class CallFragment extends Fragment {
         imageView12.setOnClickListener(this::onClick);
         call_btn.setOnClickListener(this::onClick);
         delete_btn.setOnClickListener(this::onClick);
+
+        // 전화번호부에서 클릭시 이동
+        bundle = getArguments();
+        if(bundle != null) {
+            // 데이터 수신
+            String name = bundle.getString("Name");
+            String phone = bundle.getString("Phone");
+            Log.d("전송완료", name+phone);
+            callEdit.setText(phone);
+
+
+        }
 
 
 
