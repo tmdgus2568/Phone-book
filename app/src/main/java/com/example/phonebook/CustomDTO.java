@@ -7,17 +7,20 @@ public class CustomDTO implements Parcelable {
     private String image;
     private String name;
     private String phone;
+    private String document;
 
-    public CustomDTO(String image, String name, String phone) {
+    public CustomDTO(String image, String name, String phone, String document) {
         this.image = image;
         this.name = name;
         this.phone = phone;
+        this.document = document;
     }
 
     protected CustomDTO(Parcel in) {
         image = in.readString();
         name = in.readString();
         phone = in.readString();
+        document = in.readString();
     }
 
     public static final Creator<CustomDTO> CREATOR = new Creator<CustomDTO>() {
@@ -42,6 +45,8 @@ public class CustomDTO implements Parcelable {
         return phone;
     }
 
+    public String getDocument() { return document; }
+
     public void setImage(String image) { this.image = image; }
 
     public void setName(String name) {
@@ -51,6 +56,8 @@ public class CustomDTO implements Parcelable {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    public void setDocument(String document) { this.document = document; }
 
     @Override
     public int describeContents() {
@@ -62,5 +69,6 @@ public class CustomDTO implements Parcelable {
         dest.writeString(image);
         dest.writeString(name);
         dest.writeString(phone);
+        dest.writeString(document);
     }
 }

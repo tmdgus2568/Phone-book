@@ -37,7 +37,7 @@ public class AddFriend extends AppCompatActivity {
 
     // imageview와 storage에 저장할 uri
     Uri imageUri;
-    String img = null;
+    String img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,9 @@ public class AddFriend extends AppCompatActivity {
         textPhone = findViewById(R.id.phone_text_add);
         submitButton = findViewById(R.id.submitButton);
         cancelButton = findViewById(R.id.cancelButton);
+
+        imageUri = null;
+        img = null;
 
         // 취소버튼
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -84,12 +87,17 @@ public class AddFriend extends AppCompatActivity {
                         friend.put("Image", "profile_image/basic_profile.png");
                     }
 
-                    db.collection("friends")
-                            .add(friend)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    // 저장할 문서 이름 생성
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+                    String docuName = sdf.format(new Date())+"";
+                    friend.put("Document", docuName);
+
+                    db.collection("friends").document(docuName)
+                            .set(friend)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("TAG", "DocumentSnapshot added with : " + documentReference.getId());
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("TAG", "DocumentSnapshot added with : " + "test");
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
