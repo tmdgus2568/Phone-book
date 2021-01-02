@@ -27,15 +27,11 @@ public class SingleContentItem extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.list_item, this, true);
 
-        imageView = findViewById(R.id.profile_image_add);
+        imageView = findViewById(R.id.profile_image_modify);
         textName = findViewById(R.id.name);
         textPhone = findViewById(R.id.phone);
     }
 
-//    이부분 머리 깨질거같아요
-//    public void setImageView(String url) {
-//        imageView.setImageResource(url);
-//    }
 
     public void setTextName(String name) {
         textName.setText(name);
