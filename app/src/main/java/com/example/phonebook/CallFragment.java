@@ -2,17 +2,31 @@ package com.example.phonebook;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class CallFragment extends Fragment {
     EditText callEdit;
@@ -30,12 +44,18 @@ public class CallFragment extends Fragment {
     ImageView imageView12;
     ImageView call_btn;
     ImageView delete_btn;
+    ArrayList<SearchItem> phone_list;
+    BackgroundTask task;
+    View v;
+    ListView search_list;
+    SearchAdapter adapter;
+    int value;
 
     Bundle bundle;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_call, container, false);
+        v = inflater.inflate(R.layout.fragment_call, container, false);
 
         callEdit = v.findViewById(R.id.callEdit);
         imageView1 = v.findViewById(R.id.imageView);
@@ -52,6 +72,7 @@ public class CallFragment extends Fragment {
         imageView12 = v.findViewById(R.id.imageView12);
         call_btn = v.findViewById(R.id.call_btn);
         delete_btn = v.findViewById(R.id.delete_btn);
+        search_list = v.findViewById(R.id.search_list);
 
         imageView1.setOnClickListener(this::onClick);
         imageView2.setOnClickListener(this::onClick);
@@ -68,6 +89,13 @@ public class CallFragment extends Fragment {
         call_btn.setOnClickListener(this::onClick);
         delete_btn.setOnClickListener(this::onClick);
 
+        adapter = new SearchAdapter();
+        phone_list = new ArrayList<>();
+
+        search_list.setAdapter(adapter);
+
+
+
         // 전화번호부에서 클릭시 이동
         bundle = getArguments();
         if(bundle != null) {
@@ -79,6 +107,28 @@ public class CallFragment extends Fragment {
 
 
         }
+
+        task = new BackgroundTask();
+        task.execute();
+
+        callEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String number = callEdit.getText().toString();
+                search(number);
+                System.out.println("here~~~~~");
+            }
+        });
 
 
 
@@ -124,7 +174,6 @@ public class CallFragment extends Fragment {
                 callEdit.setText(callEdit.getText().toString()+"#");
                 break;
             case R.id.call_btn:
-//                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:01033712568")));
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL);
                 dialIntent.setData(Uri.parse("tel:"+callEdit.getText().toString()));
                 startActivity(dialIntent);
@@ -133,6 +182,58 @@ public class CallFragment extends Fragment {
                 callEdit.setText(callEdit.getText().toString().replaceFirst(".$",""));
 
         }
+    }
+
+    class BackgroundTask extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final boolean[] end = {false};
+
+            db.collection("friends")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d("TAG", document.getId() + " => " + document.getData());
+                                    HashMap<String, Object> map = (HashMap)document.getData();
+                                    SearchItem items = new SearchItem(map.get("Name").toString(), map.get("Phone").toString());
+                                    phone_list.add(items);
+
+                                }
+                            } else {
+                                Log.d("TAG", "Error getting documents: ", task.getException());
+                            }
+
+                            Log.d("Loading complete", "comp");
+//                            for(int i=0;i<phone_list.size();i++){
+//                                adapter.addItem(phone_list.get(i).getName(), phone_list.get(i).getNumber());
+//                                System.out.println(phone_list.get(i).getName()+" and " +phone_list.get(i).getNumber());
+//                            }
+//                            search_list.setAdapter(adapter);
+
+
+                        }
+                    });
+
+            return true;
+        }
+
+    }
+
+    public void search(String number){
+//        phone_list.clear();
+        adapter = new SearchAdapter();
+        search_list.setAdapter(adapter);
+
+        for(int i=0;i<phone_list.size();i++){
+            if(phone_list.get(i).getNumber().contains(number) && !number.isEmpty()){
+                adapter.addItem(phone_list.get(i).getName(), phone_list.get(i).getNumber());
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
 
