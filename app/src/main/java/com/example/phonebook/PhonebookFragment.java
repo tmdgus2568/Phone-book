@@ -1,5 +1,6 @@
 package com.example.phonebook;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -124,6 +125,17 @@ public class PhonebookFragment extends Fragment {
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
+            else if(responseCode == 2) {
+                // 응답코드가 2이면 수정 activity를 띄움
+                Bundle bundle = new Bundle();
+                bundle.putStringArray("data", responseData);
+
+                ModifyFriendFragment modifyFriendFragment = new ModifyFriendFragment();
+                modifyFriendFragment.setArguments(bundle);
+
+                ((MainActivity)getActivity()).replaceFragment(modifyFriendFragment);
+
+            }
         } else {
             // 테이블 초기화
             refreshTable();
@@ -141,6 +153,7 @@ public class PhonebookFragment extends Fragment {
             }
         });
 
+        // 리스트뷰 클릭 처리
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -157,6 +170,7 @@ public class PhonebookFragment extends Fragment {
             }
         });
 
+        // 리스트뷰 롱클릭 처리
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -243,5 +257,10 @@ public class PhonebookFragment extends Fragment {
     public void deleteItem(int position) {
         phone_list.remove(position);
         adapter.notifyDataSetChanged();
+    }
+
+    // activity로 데이터 전송을 위한 인터페이스
+    public interface OnModifySetListener {
+        void onFriendSet(String document);
     }
 }

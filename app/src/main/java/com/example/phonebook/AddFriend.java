@@ -14,11 +14,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,9 +42,9 @@ public class AddFriend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
 
-        imageView = findViewById(R.id.profile_image_add);
-        textName = findViewById(R.id.name_text_add);
-        textPhone = findViewById(R.id.phone_text_add);
+        imageView = findViewById(R.id.profile_image_modify);
+        textName = findViewById(R.id.name_text_modify);
+        textPhone = findViewById(R.id.phone_text_modify);
         submitButton = findViewById(R.id.submitButton);
         cancelButton = findViewById(R.id.cancelButton);
 
