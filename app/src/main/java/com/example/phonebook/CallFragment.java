@@ -126,7 +126,7 @@ public class CallFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 String number = callEdit.getText().toString();
                 search(number);
-                System.out.println("here~~~~~");
+//                System.out.println("here~~~~~");
             }
         });
 
@@ -201,6 +201,7 @@ public class CallFragment extends Fragment {
                                     HashMap<String, Object> map = (HashMap)document.getData();
                                     SearchItem items = new SearchItem(map.get("Name").toString(), map.get("Phone").toString());
                                     phone_list.add(items);
+                                    System.out.println("here~~~~");
 
                                 }
                             } else {
@@ -213,6 +214,7 @@ public class CallFragment extends Fragment {
 //                                System.out.println(phone_list.get(i).getName()+" and " +phone_list.get(i).getNumber());
 //                            }
 //                            search_list.setAdapter(adapter);
+                            search(callEdit.getText().toString());
 
 
                         }
