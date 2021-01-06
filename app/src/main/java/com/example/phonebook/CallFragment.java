@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -127,6 +128,14 @@ public class CallFragment extends Fragment {
                 String number = callEdit.getText().toString();
                 search(number);
 //                System.out.println("here~~~~~");
+            }
+        });
+
+        search_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SearchItem item = (SearchItem) adapter.getItem(position);
+                callEdit.setText(item.getNumber());
             }
         });
 
