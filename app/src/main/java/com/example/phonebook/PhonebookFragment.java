@@ -26,6 +26,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -162,6 +164,9 @@ public class PhonebookFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("Name", adapter.getItem(position).getName());
                 bundle.putString("Phone", adapter.getItem(position).getPhone());
+
+                BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.navigation);
+                bottomNavigationView.setSelectedItemId(R.id.action_call);
 
                 CallFragment callFragment = new CallFragment();
                 callFragment.setArguments(bundle);
